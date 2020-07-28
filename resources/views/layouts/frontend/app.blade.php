@@ -13,9 +13,9 @@
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
-    <link href="{{asset('frontend/css/bootstrap.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/swiper.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/ionicons.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/frontend/css/bootstrap.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/frontend/css/swiper.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/frontend/css/ionicons.css')}}" rel="stylesheet">
 
     @stack('css')
 
@@ -28,9 +28,9 @@
     @include('layouts.frontend.partial._footer')
 
 
-    <script src="{{asset('frontend/js/jquery-3.1.1.min.js')}}"></script>
-    <script src="{{asset('frontend/js/tether.min.js')}}"></script>
-    <script src="{{asset('frontend/js/bootstrap.js')}}"></script>
+    <script src="{{asset('assets/frontend/js/jquery-3.1.1.min.js')}}"></script>
+    <script src="{{asset('assets/frontend/js/tether.min.js')}}"></script>
+    <script src="{{asset('assets/frontend/js/bootstrap.js')}}"></script>
 
     @stack('js')
 </body>

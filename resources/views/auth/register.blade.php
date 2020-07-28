@@ -3,8 +3,8 @@
 @section('title', 'Register')
 
 @push('css')
-    <link href="{{asset('frontend/css/auth/responsive.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/auth/styles.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/frontend/css/auth/responsive.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/frontend/css/auth/styles.css')}}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -89,5 +89,5 @@
 @endsection
 
 @push('js')
-    <script src="{{asset('frontend/js/scripts.js')}}"></script>
+    <script src="{{asset('assets/frontend/js/scripts.js')}}"></script>
 @endpush

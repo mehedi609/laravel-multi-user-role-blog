@@ -3,8 +3,8 @@
 @section('title', 'Home')
 
 @push('css')
-    <link href="{{asset('frontend/css/home/styles.css')}}" rel="stylesheet">
-    <link href="{{asset('frontend/css/home/responsive.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/frontend/css/home/styles.css')}}" rel="stylesheet">
+    <link href="{{asset('assets/frontend/css/home/responsive.css')}}" rel="stylesheet">
 @endpush
 
 @section('content')
@@ -420,6 +420,6 @@
 @stop
 
 @push('js')
-    <script src="{{asset('frontend/js/swiper.js')}}"></script>
-    <script src="{{asset('frontend/js/scripts.js')}}"></script>
+    <script src="{{asset('assets/frontend/js/swiper.js')}}"></script>
+    <script src="{{asset('assets/frontend/js/scripts.js')}}"></script>
 @endpush

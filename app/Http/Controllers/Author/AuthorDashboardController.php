@@ -15,7 +15,7 @@ class AuthorDashboardController extends Controller
      */
     public function index()
     {
-        return view('layouts.author.dashboard');
+        return view('author.dashboard');
     }
 
     /**
