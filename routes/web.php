@@ -29,6 +29,7 @@ Route::group(
   function() {
     Route::get('dashboard', 'AdminDashboardController@index')
       ->name('dashboard');
+    Route::resource('tag', 'TagController');
   }
 );
 

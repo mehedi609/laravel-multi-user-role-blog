@@ -2,6 +2,10 @@
 
 @section('title', "AdminDashboard")
 
+@push('css')
+
+@endpush
+
 @section('content')
   <div class="container-fluid">
     <div class="block-header">
@@ -313,3 +317,7 @@
     </div>
   </div>
 @endsection
+
+@push('js')
+
+@endpush
