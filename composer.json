@@ -12,6 +12,7 @@
         "barryvdh/laravel-ide-helper": "v2.7.0",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
+        "laravel/helpers": "v1.2.0",
         "laravel/tinker": "^2.0"
     },
     "require-dev": {
