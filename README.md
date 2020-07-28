@@ -76,3 +76,19 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Steps to run this Project
+
+_Follow the below steps to run this Awesome project:_
+
+- download the project from git
+- run `composer install`
+- run `npm install`
+- create .env file in your root dir
+- copy .env.example to .env or `cp .env.example .env`
+- create a database named _**proj-lblog**_
+- import .sql file to database from _**zDBSqlFile**_ folder
+- run `php artisan key:generate`
+- run `php artisan migrate`
+- run `php artisan serve`
+- Done. Your project is ready. Feel free to modify it.
