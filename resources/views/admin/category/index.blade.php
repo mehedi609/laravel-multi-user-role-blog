@@ -60,8 +60,8 @@
                     <tr>
                       <td>{{$key + 1}}</td>
                       <td>{{$category->name}}</td>
-                      <td>{{$tag->created_at}}</td>
-                      <td>{{$tag->updated_at}}</td>
+                      <td>{{$category->created_at}}</td>
+                      <td>{{$category->updated_at}}</td>
                       <td class="text-center">
                         <a
                           href="{{route('admin.category.edit', $category->id)}}"
