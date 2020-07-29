@@ -52,10 +52,17 @@
             </a>
           </li>
 
-          <li class="{{Request::is('admin/tag') ? 'active' : ''}}">
+          <li class="{{Request::is('admin/tag*') ? 'active' : ''}}">
             <a href="{{route('admin.tag.index')}}">
               <i class="material-icons">label</i>
               <span>Tag</span>
+            </a>
+          </li>
+
+          <li class="{{Request::is('admin/category*') ? 'active' : ''}}">
+            <a href="{{route('admin.category.index')}}">
+              <i class="material-icons">apps</i>
+              <span>Category</span>
             </a>
           </li>
 

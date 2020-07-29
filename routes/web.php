@@ -30,6 +30,7 @@ Route::group(
     Route::get('dashboard', 'AdminDashboardController@index')
       ->name('dashboard');
     Route::resource('tag', 'TagController');
+    Route::resource('category', 'CategoryController');
   }
 );
 
