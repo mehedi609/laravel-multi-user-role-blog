@@ -71,7 +71,6 @@
                         </a>
 
                         <button
-                          href="{{route('admin.tag.destroy', $category->id)}}"
                           class="btn btn-danger waves-effect"
                           onclick="deleteCategory({{$category->id}})"
                         >

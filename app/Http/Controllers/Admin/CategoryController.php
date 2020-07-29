@@ -168,10 +168,14 @@ class CategoryController extends Controller
    * Remove the specified resource from storage.
    *
    * @param \App\Category $category
-   * @return \Illuminate\Http\Response
+   * @return \Illuminate\Http\RedirectResponse
    */
   public function destroy(Category $category)
   {
-    //
+    $category->delete();
+
+    return redirect()
+      ->route('admin.category.index')
+      ->with('successMsg', 'Category Deleted Successfully');
   }
 }
