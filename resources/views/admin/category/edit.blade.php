@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', "Edit Tag")
+@section('title', "Edit Category")
 
 @section('content')
   <div class="container-fluid">
@@ -10,7 +10,7 @@
         <div class="card">
           <div class="header">
             <h2>
-              EDIT TAG
+              EDIT CATEGORY
             </h2>
 
             @if ($errors->any())
@@ -23,17 +23,39 @@
 
           </div>
           <div class="body">
-            <form action="{{route('admin.tag.update', $tag->id)}}" method="POST">
+            <form
+              action="{{route('admin.category.update', $category->id)}}"
+              method="POST"
+              enctype="multipart/form-data"
+            >
               @csrf
               @method('PUT')
               <div class="form-group form-float">
                 <div class="form-line">
-                  <input type="text" id="tag_name" class="form-control" name="tag_name" value="{{$tag->name}}">
-                  <label class="form-label">Tag Name</label>
+                  <input
+                    type="text"
+                    id="category_name"
+                    class="form-control"
+                    name="category_name"
+                    value="{{$category->name}}"
+                  >
+                  <label class="form-label">Category Name</label>
                 </div>
               </div>
 
-              <a href="{{route('admin.tag.index')}}" class="btn btn-danger m-t-15 m-r-10 waves-effect">
+              <div class="form-group">
+                <input
+                  type="file"
+                  id="category_image"
+                  class="form-control"
+                  name="category_image"
+                >
+              </div>
+
+              <a
+                href="{{route('admin.category.index')}}"
+                class="btn btn-danger m-t-15 m-r-10 waves-effect"
+              >
                 BACK
               </a>
               <button type="submit" class="btn btn-primary m-t-15 waves-effect">
