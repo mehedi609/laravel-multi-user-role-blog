@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
-use Symfony\Component\Console\Input\Input;
 
 class CategoryController extends Controller
 {
@@ -33,6 +32,26 @@ class CategoryController extends Controller
     return view('admin.category.create');
   }
 
+  private function storeImage($path, $image, $image_name, $width, $height, $old_image)
+  {
+    // Check category Dir exists otherwise create it
+    if (!Storage::disk('public')->exists($path)) {
+      Storage::disk('public')->makeDirectory($path);
+    }
+
+    if (!empty($old_image)) {
+      // Delete existing image
+      $old_image_path = "{$path}/{$old_image}";
+      if (Storage::disk('public')->exists($old_image_path)) {
+        Storage::disk('public')->delete($old_image_path);
+      }
+    }
+
+    // Resize image and upload
+    $resized_image = Image::make($image)->resize($width, $height)->stream();
+    Storage::disk('public')->put("{$path}/{$image_name}", $resized_image);
+  }
+
   /**
    * Store a newly created resource in storage.
    *
@@ -41,13 +60,14 @@ class CategoryController extends Controller
    */
   public function store(Request $request)
   {
-    $this->validate($request, [
-      'category_name' => 'required|unique:categories',
-      'category_image' => 'mimes:jpg,jpeg,png'
-    ]);
+    $request->validate(
+      [
+        'category_name' => 'required|unique:categories,name',
+        'category_image' => 'mimes:jpg,jpeg,png'
+      ]
+    );
 
-
-    $image = $request->category_image;
+    $image = $request->file('category_image');
     $category_name = $request->category_name;
     $slug = str_slug($category_name);
 
@@ -62,23 +82,11 @@ class CategoryController extends Controller
       $extension = $image->getClientOriginalExtension();
       $imageName = "{$slug}-{$currentDate}-{$uniqId}.{$extension}";
 
-      // Check category Dir exists otherwise create it
-      if (!Storage::disk('public')->exists('category')) {
-        Storage::disk('public')->makeDirectory('category');
-      }
+      //Store image in category Dir
+      $this->storeImage('category', $image, $imageName, 1600, 479, null);
 
-      // Resize image and upload
-      $resized_image = Image::make($image)->resize(1600, 479)->stream();
-      Storage::disk('public')->put("category/{$imageName}", $resized_image);
-
-      // Check category slider Dir exists otherwise create it
-      if (!Storage::disk('public')->exists('category/slider')) {
-        Storage::disk('public')->makeDirectory('category/slider');
-      }
-
-      // Resize image and upload
-      $resized_slider_image = Image::make($image)->resize(500, 333)->stream();
-      Storage::disk('public')->put("category/slider/{$imageName}", $resized_slider_image);
+      // store image in category/slider Dir
+      $this->storeImage('category/slider', $image, $imageName, 500, 333, null);
 
       $category->image = $imageName;
     }
@@ -118,11 +126,42 @@ class CategoryController extends Controller
    *
    * @param \Illuminate\Http\Request $request
    * @param \App\Category $category
-   * @return \Illuminate\Http\Response
+   * @return \Illuminate\Http\RedirectResponse
    */
   public function update(Request $request, Category $category)
   {
+    $request->validate(
+      [
+        'category_name' => 'required|unique:categories,name,'.$category->id,
+        'category_image' => 'mimes:jpg,jpeg,png'
+      ]
+    );
 
+    $category_name = $request->category_name;
+    $slug = str_slug($category_name);
+    $category->name = $category_name;
+    $category->slug = $slug;
+
+    $image = $request->file('category_image');
+
+    if (isset($image)) {
+      $date = Carbon::now()->toDateString();
+      $unique_id = uniqid();
+      $extension = $image->getClientOriginalExtension();
+      $image_name = "{$slug}-{$date}-{$unique_id}.${extension}";
+
+      $this->storeImage('category', $image, $image_name, 1600, 479, $category->image);
+
+      $this->storeImage('category/slider', $image, $image_name, 500, 333, $category->image);
+
+      $category->image = $image_name;
+    }
+
+    $category->save();
+
+    return redirect()
+      ->route('admin.category.index')
+      ->with('successMsg', 'Category Updated Successfully');
   }
 
   /**

@@ -30,6 +30,7 @@
             >
               @csrf
               @method('PUT')
+
               <div class="form-group form-float">
                 <div class="form-line">
                   <input
