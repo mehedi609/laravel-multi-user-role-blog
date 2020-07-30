@@ -32,6 +32,14 @@ class CategoryController extends Controller
     return view('admin.category.create');
   }
 
+  private function deleteExistingImage($path, $old_image)
+  {
+    $old_image_path = "{$path}/{$old_image}";
+    if (Storage::disk('public')->exists($old_image_path)) {
+      Storage::disk('public')->delete($old_image_path);
+    }
+  }
+
   private function storeImage($path, $image, $image_name, $width, $height, $old_image)
   {
     // Check category Dir exists otherwise create it
@@ -41,10 +49,7 @@ class CategoryController extends Controller
 
     if (!empty($old_image)) {
       // Delete existing image
-      $old_image_path = "{$path}/{$old_image}";
-      if (Storage::disk('public')->exists($old_image_path)) {
-        Storage::disk('public')->delete($old_image_path);
-      }
+      $this->deleteExistingImage($path, $old_image);
     }
 
     // Resize image and upload
@@ -173,6 +178,9 @@ class CategoryController extends Controller
   public function destroy(Category $category)
   {
     $category->delete();
+
+    $this->deleteExistingImage('category', $category->image);
+    $this->deleteExistingImage('category/slider', $category->image);
 
     return redirect()
       ->route('admin.category.index')
