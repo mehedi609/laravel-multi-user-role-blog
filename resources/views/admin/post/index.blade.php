@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', "Tag")
+@section('title', "Post")
 
 @push('css')
   <link
@@ -12,9 +12,9 @@
 @section('content')
   <div class="container-fluid">
     <div class="block-header">
-      <a href="{{route('admin.tag.create')}}" class="btn btn-primary waves-effect">
+      <a href="{{route('admin.post.create')}}" class="btn btn-primary waves-effect">
         <i class="material-icons">add</i>
-        <span>Add New Tag</span>
+        <span>Add New Post</span>
       </a>
 
       @if (session('successMsg'))
@@ -23,15 +23,14 @@
         </div>
       @endif
     </div>
-    <!-- Exportable Table -->
+
     <!-- Exportable Table -->
     <div class="row clearfix">
       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card">
           <div class="header">
             <h2>
-              ALL TAGS
-              <span class="badge bg-pink">{{$tags->count()}}</span>
+              ALL POSTS <span class="my-auto badge bg-pink">{{$posts->count()}}</span>
             </h2>
           </div>
 
@@ -41,8 +40,13 @@
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Post Count</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>
+                      <i class="material-icons">visibility</i>
+                    </th>
+                    <th>In Approve</th>
+                    <th>Status</th>
                     <th>Created At</th>
                     <th>Updated At</th>
                     <th>Actions</th>
@@ -51,28 +55,48 @@
                 <tfoot>
                   <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Post Count</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>
+                      <i class="material-icons">visibility</i>
+                    </th>
+                    <th>In Approve</th>
+                    <th>Status</th>
                     <th>Created At</th>
                     <th>Updated At</th>
                     <th>Actions</th>
                   </tr>
                 </tfoot>
                 <tbody>
-                  @foreach ($tags as $key => $tag)
+                  @foreach ($posts as $key => $post)
                     <tr>
                       <td>{{$key + 1}}</td>
-                      <td>{{$tag->name}}</td>
+                      <td>{{str_limit($post->title, 15)}}</td>
+                      <td>{{$post->user->name}}</td>
+                      <td>{{$post->view_count}}</td>
                       <td>
-                        <span class="badge bg-info">
-                          {{$tag->posts->count()}}
-                        </span>
+                        @if ($post->is_approve)
+                            <span class="badge bg-blue">Approve</span>
+                        @else
+                            <span class="badge bg-pink">Pending</span>
+                        @endif
                       </td>
-                      <td>{{$tag->created_at}}</td>
-                      <td>{{$tag->updated_at}}</td>
+                      <td>
+                        @if ($post->status)
+                            <span class="badge bg-blue">Published</span>
+                        @else
+                            <span class="badge bg-pink">Pending</span>
+                        @endif
+                      </td>
+                      <td>
+                        {{\Carbon\Carbon::parse($post->created_at)->toFormattedDateString()}}
+                      </td>
+                      <td>
+                        {{\Carbon\Carbon::parse($post->updated_at)->toFormattedDateString()}}
+                      </td>
                       <td class="text-center">
                         <a
-                          href="{{route('admin.tag.edit', $tag->id)}}"
+                          href="{{route('admin.post.edit', $post->id)}}"
                           class="btn btn-info waves-effect m-r-10"
                         >
                           <i class="material-icons">edit</i>
@@ -80,14 +104,14 @@
 
                         <button
                           class="btn btn-danger waves-effect"
-                          onclick="deleteTag({{$tag->id}})"
+                          onclick="deletePost({{$post->id}})"
                         >
                           <i class="material-icons">delete</i>
                         </button>
 
                         <form
-                          id="delete-tag-form-{{$tag->id}}"
-                          action="{{route('admin.tag.destroy', $tag->id)}}"
+                          id="delete-post-form-{{$post->id}}"
+                          action="{{route('admin.post.destroy', $post->id)}}"
                           method="POST"
                           class="d-none"
                         >
@@ -105,7 +129,7 @@
       </div>
     </div>
     <!-- #END# Exportable Table -->
-    <!-- #END# Exportable Table -->
+
   </div>
 @stop
 
@@ -127,7 +151,7 @@
   <script src="{{ asset('assets/backend/js/pages/tables/jquery-datatable.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script>
-    function deleteTag(id) {
+    function deletePost(id) {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-success',
@@ -147,7 +171,7 @@
       }).then((result) => {
         if (result.value) {
           event.preventDefault();
-          document.getElementById(`delete-tag-form-${id}`).submit();
+          document.getElementById(`delete-post-form-${id}`).submit();
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel

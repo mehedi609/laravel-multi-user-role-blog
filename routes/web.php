@@ -31,6 +31,7 @@ Route::group(
       ->name('dashboard');
     Route::resource('tag', 'TagController');
     Route::resource('category', 'CategoryController');
+    Route::resource('post', 'PostController');
   }
 );
 
