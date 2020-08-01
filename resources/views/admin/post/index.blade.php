@@ -48,7 +48,7 @@
                     <th>In Approve</th>
                     <th>Status</th>
                     <th>Created At</th>
-                    <th>Updated At</th>
+
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -63,12 +63,12 @@
                     <th>In Approve</th>
                     <th>Status</th>
                     <th>Created At</th>
-                    <th>Updated At</th>
+
                     <th>Actions</th>
                   </tr>
                 </tfoot>
                 <tbody>
-                  @foreach ($posts as $key => $post)
+                  @foreach ($posts ?? '' as $key => $post)
                     <tr>
                       <td>{{$key + 1}}</td>
                       <td>{{str_limit($post->title, 15)}}</td>
@@ -89,12 +89,17 @@
                         @endif
                       </td>
                       <td>
-                        {{\Carbon\Carbon::parse($post->created_at)->toFormattedDateString()}}
+                        {{$post->created_at->toFormattedDateString()}}
                       </td>
-                      <td>
-                        {{\Carbon\Carbon::parse($post->updated_at)->toFormattedDateString()}}
-                      </td>
+
                       <td class="text-center">
+                        <a
+                          href="{{route('admin.post.show', $post->id)}}"
+                          class="btn btn-success waves-effect m-r-10"
+                        >
+                          <i class="material-icons">visibility</i>
+                        </a>
+
                         <a
                           href="{{route('admin.post.edit', $post->id)}}"
                           class="btn btn-info waves-effect m-r-10"

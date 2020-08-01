@@ -118,11 +118,14 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function show(Post $post)
     {
-        //
+        $tags = $post->tags;
+        $categories = $post->categories;
+
+        return view('admin.post.show', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -196,6 +199,12 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $this->deleteExistingImage('post', $post->image);
+
+        $post->categories()->detach();
+        $post->tags()->detach();
+        $post->delete();
+
+        return redirect(route('admin.post.index'))->with('successMsg', 'Post deleted successfully');
     }
 }
