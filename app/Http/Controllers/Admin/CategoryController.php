@@ -40,16 +40,11 @@ class CategoryController extends Controller
     }
   }
 
-  private function storeImage($path, $image, $image_name, $width, $height, $old_image)
+  private function storeImage($path, $image, $image_name, $width, $height)
   {
     // Check category Dir exists otherwise create it
     if (!Storage::disk('public')->exists($path)) {
       Storage::disk('public')->makeDirectory($path);
-    }
-
-    if (!empty($old_image)) {
-      // Delete existing image
-      $this->deleteExistingImage($path, $old_image);
     }
 
     // Resize image and upload
@@ -93,10 +88,10 @@ class CategoryController extends Controller
       $image_name = $this->createUniqueImageName($image, $slug);
 
       //Store image in category Dir
-      $this->storeImage('category', $image, $image_name, 1600, 479, null);
+      $this->storeImage('category', $image, $image_name, 1600, 479);
 
       // store image in category/slider Dir
-      $this->storeImage('category/slider', $image, $image_name, 500, 333, null);
+      $this->storeImage('category/slider', $image, $image_name, 500, 333);
 
       $category->image = $image_name;
     }
@@ -160,9 +155,11 @@ class CategoryController extends Controller
       $extension = $image->getClientOriginalExtension();
       $image_name = "{$slug}-{$date}-{$unique_id}.${extension}";
 
-      $this->storeImage('category', $image, $image_name, 1600, 479, $category->image);
+      $this->deleteExistingImage('category', $category->image);
+      $this->storeImage('category', $image, $image_name, 1600, 479);
 
-      $this->storeImage('category/slider', $image, $image_name, 500, 333, $category->image);
+      $this->deleteExistingImage('category/slider', $category->image);
+      $this->storeImage('category/slider', $image, $image_name, 500, 333);
 
       $category->image = $image_name;
     }

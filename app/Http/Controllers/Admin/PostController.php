@@ -45,16 +45,11 @@ class PostController extends Controller
         }
     }
 
-    private function storeImage($path, $image, $image_name, $width, $height, $old_image)
+    private function storeImage($path, $image, $image_name, $width, $height)
     {
         // Check category Dir exists otherwise create it
         if (!Storage::disk('public')->exists($path)) {
             Storage::disk('public')->makeDirectory($path);
-        }
-
-        if (!empty($old_image)) {
-            // Delete existing image
-            $this->deleteExistingImage($path, $old_image);
         }
 
         // Resize image and upload
@@ -104,7 +99,7 @@ class PostController extends Controller
             $image_name = $this->createUniqueImageName($image, $slug);
 
             //Store image in post dir
-            $this->storeImage('post', $image, $image_name, 1600, 1066, null);
+            $this->storeImage('post', $image, $image_name, 1600, 1066);
 
             $post->image = $image_name;
         }
@@ -138,7 +133,10 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        $categories = Category::all();
+        $tags = Tag::all();
+
+        return view('admin.post.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -146,11 +144,48 @@ class PostController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Post  $post
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $request->validate([
+           'post_title' => 'required|unique:posts,title,'.$post->id,
+           'post_image' => 'mimes:jpg,jpeg,png',
+           'categories' => 'required',
+           'tags' => 'required',
+           'post_body' => 'required'
+        ]);
+
+        $post_title = $request->post_title;
+        $slug = str_slug($post_title);
+
+        $post->title = $post_title;
+        $post->slug = $slug;
+        $post->user_id = Auth::id();
+        $post->body = $request->post_body;
+        $post->status = isset($request->status);
+        $post->is_approved = true;
+
+        $image = $request->file('post_image');
+
+        if (isset($image)) {
+            $image_name = $this->createUniqueImageName($image, $slug);
+
+            //delete existing image
+            $this->deleteExistingImage('post', $post->image);
+
+            //store new image
+            $this->storeImage('post', $image, $image_name, 1600, 1066);
+
+            $post->image = $image_name;
+        }
+
+        $post->save();
+        $post->categories()->sync($request->categories);
+        $post->tags()->sync($request->tags);
+
+        return redirect(route('admin.post.index'))
+            ->with('successMsg', 'Post updated successfully');
     }
 
     /**

@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', "Create Category")
+@section('title', "Create Post")
 
 @push('css')
   <link
@@ -51,7 +51,6 @@
                     class="form-control"
                     name="post_title"
                   >
-                  <label class="form-label">Post Title</label>
                 </div>
               </div>
 
