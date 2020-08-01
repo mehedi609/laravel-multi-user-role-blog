@@ -57,6 +57,14 @@ class CategoryController extends Controller
     Storage::disk('public')->put("{$path}/{$image_name}", $resized_image);
   }
 
+    private function createUniqueImageName($image, $slug)
+    {
+        $currentDate = Carbon::now()->toDateString();
+        $uniqId = uniqid();
+        $extension = $image->getClientOriginalExtension();
+        return "{$slug}-{$currentDate}-{$uniqId}.{$extension}";
+    }
+
   /**
    * Store a newly created resource in storage.
    *
@@ -82,18 +90,15 @@ class CategoryController extends Controller
 
     if (isset($image)) {
       //Make an unique image name
-      $currentDate = Carbon::now()->toDateString();
-      $uniqId = uniqid();
-      $extension = $image->getClientOriginalExtension();
-      $imageName = "{$slug}-{$currentDate}-{$uniqId}.{$extension}";
+      $image_name = $this->createUniqueImageName($image, $slug);
 
       //Store image in category Dir
-      $this->storeImage('category', $image, $imageName, 1600, 479, null);
+      $this->storeImage('category', $image, $image_name, 1600, 479, null);
 
       // store image in category/slider Dir
-      $this->storeImage('category/slider', $image, $imageName, 500, 333, null);
+      $this->storeImage('category/slider', $image, $image_name, 500, 333, null);
 
-      $category->image = $imageName;
+      $category->image = $image_name;
     }
 
     $category->save();

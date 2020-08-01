@@ -6,7 +6,11 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use App\Post;
 use App\Tag;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
@@ -33,15 +37,86 @@ class PostController extends Controller
         return view('admin.post.create', compact('tags', 'categories'));
     }
 
+    private function deleteExistingImage($path, $old_image)
+    {
+        $old_image_path = "{$path}/{$old_image}";
+        if (Storage::disk('public')->exists($old_image_path)) {
+            Storage::disk('public')->delete($old_image_path);
+        }
+    }
+
+    private function storeImage($path, $image, $image_name, $width, $height, $old_image)
+    {
+        // Check category Dir exists otherwise create it
+        if (!Storage::disk('public')->exists($path)) {
+            Storage::disk('public')->makeDirectory($path);
+        }
+
+        if (!empty($old_image)) {
+            // Delete existing image
+            $this->deleteExistingImage($path, $old_image);
+        }
+
+        // Resize image and upload
+        $resized_image = Image::make($image)->resize($width, $height)->stream();
+        Storage::disk('public')->put("{$path}/{$image_name}", $resized_image);
+    }
+
+    private function createUniqueImageName($image, $slug)
+    {
+        $currentDate = Carbon::now()->toDateString();
+        $uniqId = uniqid();
+        $extension = $image->getClientOriginalExtension();
+        return "{$slug}-{$currentDate}-{$uniqId}.{$extension}";
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Http\Response|\Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "post_title" => 'required|unique:posts,title',
+            "post_image" => 'mimes:jpg,jpeg,png',
+            "categories" => 'required',
+            "tags"       => 'required',
+            "post_body"  => 'required',
+        ]);
+
+        $post = new Post();
+
+        $image = $request->file('post_image');
+        $post_title = $request->post_title;
+        $slug = str_slug($post_title);
+
+        $post->title = $post_title;
+        $post->slug = $slug;
+        $post->user_id = Auth::id();
+        $post->body = $request->post_body;
+        $post->status = isset($request->status);
+        $post->is_approved = true;
+
+        if (isset($image)) {
+            //Make an unique image name
+            $image_name = $this->createUniqueImageName($image, $slug);
+
+            //Store image in post dir
+            $this->storeImage('post', $image, $image_name, 1600, 1066, null);
+
+            $post->image = $image_name;
+        }
+
+        $post->save();
+
+        $post->categories()->attach($request->categories);
+        $post->tags()->attach($request->tags);
+
+        return redirect(route('admin.post.index'))
+            ->with('successMsg', 'Post Created Successfully');
+
     }
 
     /**
