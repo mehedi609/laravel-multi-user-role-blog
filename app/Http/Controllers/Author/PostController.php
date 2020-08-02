@@ -90,10 +90,13 @@ class PostController extends Controller
      * Display the specified resource.
      *
      * @param  \App\Post  $post
-     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function show(Post $post)
     {
+        if ($post->user_id !== Auth::id())
+            return redirect()->back();
+
         return view('author.post.show', compact('post'));
     }
 
@@ -105,6 +108,9 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
+        if ($post->user_id !== Auth::id())
+            return redirect()->back();
+
         $categories = Category::all();
         $tags = Tag::all();
 
@@ -120,6 +126,9 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        if ($post->user_id !== Auth::id())
+            return redirect()->back();
+
         $request->validate([
             'post_title' => 'required|unique:posts,title,'.$post->id,
             'post_image' => 'mimes:jpg,jpeg,png',
@@ -167,6 +176,9 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        if ($post->user_id !== Auth::id())
+            return redirect()->back();
+
         StoreImage::deleteExistingImage('post', $post->image);
 
         $post->categories()->detach();
