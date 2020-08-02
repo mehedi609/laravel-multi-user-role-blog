@@ -153,10 +153,10 @@
     function deletePost(id) {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
+          confirmButton: 'btn btn-success waves-effect ml-2',
+          cancelButton: 'btn btn-danger waves-effect'
         },
-        buttonsStyling: false
+        buttonsStyling: true
       })
 
       swalWithBootstrapButtons.fire({

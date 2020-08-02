@@ -183,4 +183,18 @@ class PostController extends Controller
 
         return view('admin.post.pending', compact('posts'));
     }
+
+    public function approval(Post $post)
+    {
+        if (!$post->is_approved) {
+            $post->is_approved = true;
+            $post->save();
+
+            Toastr::success('Post approved successfully');
+            return redirect(route('admin.post.pending'));
+        } else {
+            Toastr::info('Post already approved!');
+            return redirect(route('admin.post.pending'));
+        }
+    }
 }

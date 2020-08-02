@@ -14,10 +14,23 @@
         <span>Back</span>
       </a>
 
-      <button class="btn btn-success pull-right {{$post->is_approved ? 'disabled' : ''}}">
+      <button
+        class="btn btn-success pull-right waves-effect {{$post->is_approved ? 'disabled' : ''}}"
+        onclick="approvePost({{$post->id}})"
+      >
         <i class="material-icons">done</i>
         <span>Approve</span>
       </button>
+
+      <form
+        action="{{route('admin.post.approve', $post->id)}}"
+        method="POST"
+        class="d-none"
+        id="approval-form"
+      >
+        @csrf
+        @method('PUT')
+      </form>
 
     </div>
 
@@ -92,5 +105,40 @@
 @stop
 
 @push('js')
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+  <script>
+      function approvePost(id) {
+          const swalWithBootstrapButtons = Swal.mixin({
+              customClass: {
+                  confirmButton: 'btn btn-success waves-effect ml-2',
+                  cancelButton: 'btn btn-danger waves-effect'
+              },
+              buttonsStyling: true
+          })
 
+          swalWithBootstrapButtons.fire({
+              title: 'Are you sure?',
+              text: "Do you want to approve this post?",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yes, approve it!',
+              cancelButtonText: 'No, cancel!',
+              reverseButtons: true
+          }).then((result) => {
+              if (result.value) {
+                  event.preventDefault();
+                  document.getElementById(`approval-form`).submit();
+              } else if (
+                  /* Read more about handling dismissals below */
+                  result.dismiss === Swal.DismissReason.cancel
+              ) {
+                  swalWithBootstrapButtons.fire(
+                      'Cancelled',
+                      'The post is not approved',
+                      'info'
+                  )
+              }
+          })
+      }
+  </script>
 @endpush

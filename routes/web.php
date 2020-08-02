@@ -34,7 +34,7 @@ Route::group(
     Route::resource('post', 'PostController');
 
     Route::get('pending/post', 'PostController@pending')->name('post.pending');
-    Route::put('post/{post}/approve}', 'PostController@approval')->name('post.approval');
+    Route::put('post/{post}/approve}', 'PostController@approval')->name('post.approve');
   }
 );
 

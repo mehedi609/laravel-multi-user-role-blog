@@ -80,16 +80,23 @@
                       </td>
 
                       <td class="text-center">
+                        <button
+                          class="btn bg-deep-purple waves-effect"
+                          onclick="approvePost({{$post->id}})"
+                        >
+                          <i class="material-icons">done</i>
+                        </button>
+
                         <a
                           href="{{route('admin.post.show', $post->id)}}"
-                          class="btn btn-success waves-effect m-r-10"
+                          class="btn btn-success waves-effect"
                         >
                           <i class="material-icons">visibility</i>
                         </a>
 
                         <a
                           href="{{route('admin.post.edit', $post->id)}}"
-                          class="btn btn-info waves-effect m-r-10"
+                          class="btn btn-info waves-effect"
                         >
                           <i class="material-icons">edit</i>
                         </a>
@@ -109,6 +116,16 @@
                         >
                           @csrf
                           @method('DELETE')
+                        </form>
+
+                        <form
+                          action="{{route('admin.post.approve', $post->id)}}"
+                          method="POST"
+                          class="d-none"
+                          id="approval-form"
+                        >
+                          @csrf
+                          @method('PUT')
                         </form>
                       </td>
                     </tr>
@@ -146,10 +163,10 @@
     function deletePost(id) {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
+          confirmButton: 'btn btn-success waves-effect ml-2',
+          cancelButton: 'btn btn-danger waves-effect'
         },
-        buttonsStyling: false
+        buttonsStyling: true
       })
 
       swalWithBootstrapButtons.fire({
@@ -175,6 +192,40 @@
           )
         }
       })
+    }
+
+    function approvePost(id) {
+        const swalWithBootstrapButtons = Swal.mixin({
+            customClass: {
+                confirmButton: 'btn btn-success waves-effect ml-2',
+                cancelButton: 'btn btn-danger waves-effect'
+            },
+            buttonsStyling: true
+        })
+
+        swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: "Do you want to approve this post?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, approve it!',
+            cancelButtonText: 'No, cancel!',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.value) {
+                event.preventDefault();
+                document.getElementById(`approval-form`).submit();
+            } else if (
+                /* Read more about handling dismissals below */
+                result.dismiss === Swal.DismissReason.cancel
+            ) {
+                swalWithBootstrapButtons.fire(
+                    'Cancelled',
+                    'The post is not approved',
+                    'info'
+                )
+            }
+        })
     }
   </script>
 @endpush
