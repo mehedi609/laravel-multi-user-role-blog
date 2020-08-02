@@ -35,8 +35,7 @@ Route::group(
   }
 );
 
-Route::group(
-  [
+Route::group([
     'as' => 'author.',
     'prefix' => 'author',
     'namespace' => 'Author',
@@ -45,5 +44,6 @@ Route::group(
   function() {
     Route::get('dashboard', 'AuthorDashboardController@index')
       ->name('dashboard');
+    Route::resource('post', 'PostController');
   }
 );

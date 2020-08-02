@@ -101,11 +101,18 @@
             </a>
           </li>
 
+          <li class="{{Request::is('author/post*') ? 'active' : ''}}">
+            <a href="{{route('author.post.index')}}">
+              <i class="material-icons">library_books</i>
+              <span>Post</span>
+            </a>
+          </li>
+
           <li class="header">SYSTEM</li>
           <li>
             <a
               href="{{ route('logout') }}"
-              onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+              onclick="event.preventDefault(); $('#logout-form').submit();"
             >
               <i class="material-icons">input</i>
               <span>Sign Out</span>

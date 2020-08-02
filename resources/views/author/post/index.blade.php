@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', "Post")
+@section('title', "Author Post")
 
 @push('css')
   <link
@@ -12,7 +12,7 @@
 @section('content')
   <div class="container-fluid">
     <div class="block-header">
-      <a href="{{route('admin.post.create')}}" class="btn btn-primary waves-effect">
+      <a href="{{route('author.post.create')}}" class="btn btn-primary waves-effect">
         <i class="material-icons">add</i>
         <span>Add New Post</span>
       </a>
@@ -94,14 +94,14 @@
 
                       <td class="text-center">
                         <a
-                          href="{{route('admin.post.show', $post->id)}}"
+                          href="{{route('author.post.show', $post->id)}}"
                           class="btn btn-success waves-effect m-r-10"
                         >
                           <i class="material-icons">visibility</i>
                         </a>
 
                         <a
-                          href="{{route('admin.post.edit', $post->id)}}"
+                          href="{{route('author.post.edit', $post->id)}}"
                           class="btn btn-info waves-effect m-r-10"
                         >
                           <i class="material-icons">edit</i>
@@ -116,7 +116,7 @@
 
                         <form
                           id="delete-post-form-{{$post->id}}"
-                          action="{{route('admin.post.destroy', $post->id)}}"
+                          action="{{route('author.post.destroy', $post->id)}}"
                           method="POST"
                           class="d-none"
                         >

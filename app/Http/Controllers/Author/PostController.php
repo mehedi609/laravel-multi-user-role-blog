@@ -1,29 +1,26 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Author;
 
 use App\Category;
 use App\Helpers\StoreImage;
 use App\Http\Controllers\Controller;
 use App\Post;
 use App\Tag;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function index()
     {
-        $posts = Post::latest()->get();
-        return view('admin.post.index', compact('posts'));
+        $posts = Auth::user()->posts()->latest()->get();
+        return view('author.post.index', compact('posts'));
     }
 
     /**
@@ -35,7 +32,8 @@ class PostController extends Controller
     {
         $tags = Tag::all();
         $categories = Category::all();
-        return view('admin.post.create', compact('tags', 'categories'));
+
+        return view('author.post.create', compact('tags', 'categories'));
     }
 
     /**
@@ -65,7 +63,7 @@ class PostController extends Controller
         $post->user_id = Auth::id();
         $post->body = $request->post_body;
         $post->status = isset($request->status);
-        $post->is_approved = true;
+        $post->is_approved = false;
 
         if (isset($image)) {
             $storeImage = new StoreImage(
@@ -82,8 +80,8 @@ class PostController extends Controller
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
 
-        return redirect(route('admin.post.index'))
-            ->with('successMsg', 'Post Created Successfully');
+        return redirect(route('author.post.index'))
+            ->with('successMsg', 'Author Post Created Successfully');
     }
 
     /**
@@ -94,7 +92,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('admin.post.show', compact('post'));
+        return view('author.post.show', compact('post'));
     }
 
     /**
@@ -108,7 +106,7 @@ class PostController extends Controller
         $categories = Category::all();
         $tags = Tag::all();
 
-        return view('admin.post.edit', compact('post', 'categories', 'tags'));
+        return view('author.post.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -121,11 +119,11 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $request->validate([
-           'post_title' => 'required|unique:posts,title,'.$post->id,
-           'post_image' => 'mimes:jpg,jpeg,png',
-           'categories' => 'required',
-           'tags' => 'required',
-           'post_body' => 'required'
+            'post_title' => 'required|unique:posts,title,'.$post->id,
+            'post_image' => 'mimes:jpg,jpeg,png',
+            'categories' => 'required',
+            'tags' => 'required',
+            'post_body' => 'required'
         ]);
 
         $post_title = $request->post_title;
@@ -136,7 +134,7 @@ class PostController extends Controller
         $post->user_id = Auth::id();
         $post->body = $request->post_body;
         $post->status = isset($request->status);
-        $post->is_approved = true;
+        $post->is_approved = false;
 
         $image = $request->file('post_image');
 
@@ -154,7 +152,7 @@ class PostController extends Controller
         $post->categories()->sync($request->categories);
         $post->tags()->sync($request->tags);
 
-        return redirect(route('admin.post.index'))
+        return redirect(route('author.post.index'))
             ->with('successMsg', 'Post updated successfully');
     }
 
@@ -173,7 +171,7 @@ class PostController extends Controller
         $post->tags()->detach();
         $post->delete();
 
-        return redirect(route('admin.post.index'))
-            ->with('successMsg', 'Post deleted successfully');
+        return redirect(route('author.post.index'))
+            ->with('successMsg', 'Author Post deleted successfully');
     }
 }

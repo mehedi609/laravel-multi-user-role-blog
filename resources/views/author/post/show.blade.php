@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', "Show Post")
+@section('title', "Show Author Post")
 
 @push('css')
 
@@ -9,7 +9,7 @@
 @section('content')
   <div class="container-fluid">
     <div class="m-b-15">
-      <a href="{{route('admin.post.index')}}" class="btn btn-danger waves-effect">
+      <a href="{{route('author.post.index')}}" class="btn btn-danger waves-effect">
         <i class="material-icons">reply</i>
         <span>Back</span>
       </a>
