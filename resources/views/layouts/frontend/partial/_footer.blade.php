@@ -41,9 +41,24 @@
 
           <h4 class="title"><b>SUBSCRIBE</b></h4>
           <div class="input-area">
-            <form>
-              <input class="email-input" type="text" placeholder="Enter your email">
-              <button class="submit-btn" type="submit"><i class="icon ion-ios-email-outline"></i></button>
+            <form method="POST" action="{{route('subscriber.store')}}">
+              @csrf
+              <input
+                class="email-input"
+                type="email"
+                name="subscriber_email"
+                placeholder="Enter your email"
+              >
+              @error('subscriber_email')
+              <br><br><br>
+                <div class="alert alert-danger">
+                  {{ $message }}
+                </div>
+              @enderror
+
+              <button class="submit-btn" type="submit">
+                <i class="icon ion-ios-email-outline"></i>
+              </button>
             </form>
           </div>
 

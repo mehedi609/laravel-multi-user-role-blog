@@ -14,6 +14,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <link href="{{asset('assets/frontend/css/bootstrap.css')}}" rel="stylesheet">
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
     <link href="{{asset('assets/frontend/css/swiper.css')}}" rel="stylesheet">
     <link href="{{asset('assets/frontend/css/ionicons.css')}}" rel="stylesheet">
 
@@ -29,9 +30,11 @@
 
 
     <script src="{{asset('assets/frontend/js/jquery-3.1.1.min.js')}}"></script>
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
     <script src="{{asset('assets/frontend/js/tether.min.js')}}"></script>
     <script src="{{asset('assets/frontend/js/bootstrap.js')}}"></script>
 
     @stack('js')
+    {!! Toastr::message() !!}
 </body>
 </html>

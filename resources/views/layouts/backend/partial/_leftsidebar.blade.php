@@ -80,6 +80,13 @@
             </a>
           </li>
 
+          <li class="{{Request::is('admin/subscriber') ? 'active' : ''}}">
+            <a href="{{route('admin.subscriber.index')}}">
+              <i class="material-icons">subscriptions</i>
+              <span>All Subscribers</span>
+            </a>
+          </li>
+
           <li class="header">SYSTEM</li>
           <li>
             <a

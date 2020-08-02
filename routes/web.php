@@ -19,6 +19,8 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::resource('subscriber', 'SubscriberController')->only(['store']);
+
 Route::group(
   [
     'as' => 'admin.',
@@ -32,6 +34,7 @@ Route::group(
     Route::resource('tag', 'TagController');
     Route::resource('category', 'CategoryController');
     Route::resource('post', 'PostController');
+    Route::resource('subscriber', 'SubscriberController')->only(['index', 'destroy']);
 
     Route::get('pending/post', 'PostController@pending')->name('post.pending');
     Route::put('post/{post}/approve}', 'PostController@approval')->name('post.approve');
