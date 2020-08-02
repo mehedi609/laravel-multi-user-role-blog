@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2",
         "barryvdh/laravel-ide-helper": "v2.7.0",
+        "brian2694/laravel-toastr": "^5.54",
         "fideloper/proxy": "^4.0",
         "intervention/image": "2.5.1",
         "laravel/framework": "^6.2",

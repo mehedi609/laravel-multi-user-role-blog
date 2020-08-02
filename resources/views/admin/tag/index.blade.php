@@ -17,11 +17,6 @@
         <span>Add New Tag</span>
       </a>
 
-      @if (session('successMsg'))
-        <div class="alert alert-success" roles="alert">
-          {{session('successMsg')}}
-        </div>
-      @endif
     </div>
     <!-- Exportable Table -->
     <!-- Exportable Table -->

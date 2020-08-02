@@ -17,9 +17,9 @@
         <span>Add New Post</span>
       </a>
 
-      @if (session('successMsg'))
+      @if (Session::has('successMsg'))
         <div class="alert alert-success" roles="alert">
-          {{session('successMsg')}}
+          toastr.success("{{ Session::get('successMsg') }}");
         </div>
       @endif
     </div>

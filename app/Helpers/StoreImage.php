@@ -27,16 +27,16 @@ class StoreImage
         $this->height = $height;
     }
 
-    public function createUniqueImageName()
+    public static function createUniqueImageName($image, $title)
     {
         $currentDate = Carbon::now()->toDateString();
         $uniqId = uniqid();
-        $extension = $this->image->getClientOriginalExtension();
-        $slug = str_slug($this->title);
+        $extension = $image->getClientOriginalExtension();
+        $slug = str_slug($title);
         return "{$slug}-{$currentDate}-{$uniqId}.{$extension}";
     }
 
-    public function deleteExistingImage($path, $old_image)
+    public static function deleteExistingImage($path, $old_image)
     {
         $old_image_path = "{$path}/{$old_image}";
         if (Storage::disk('public')->exists($old_image_path)) {
@@ -44,7 +44,7 @@ class StoreImage
         }
     }
 
-    public function storeImage()
+    public function storeImage($unique_image_name=null)
     {
         // Check category Dir exists otherwise create it
         if (!Storage::disk('public')->exists($this->path)) {
@@ -53,15 +53,19 @@ class StoreImage
 
         //delete existing image
         if ($this->old_image)
-            $this->deleteExistingImage($this->path, $this->old_image);
+            self::deleteExistingImage($this->path, $this->old_image);
 
         // Resize original image
         $resized_image = Image::make($this->image)
             ->resize($this->width, $this->height)
             ->stream();
 
-        // create an unique image name and store the image
-        $image_name = $this->createUniqueImageName();
+        // create an unique image name
+        if (!$unique_image_name)
+            $image_name = self::createUniqueImageName($this->image, $this->title);
+        else
+            $image_name = $unique_image_name;
+
         Storage::disk('public')->put("{$this->path}/{$image_name}", $resized_image);
 
         return $image_name;

@@ -28,6 +28,8 @@
     <!-- Morris Chart Css-->
     <link href="{{asset('assets/backend/plugins/morrisjs/morris.css')}}" rel="stylesheet" />
 
+    <link rel="stylesheet" href="http://cdn.bootcss.com/toastr.js/latest/css/toastr.min.css">
+
     <!-- Custom Css -->
     <link href="{{asset('assets/backend/css/style.css')}}" rel="stylesheet" />
 
@@ -87,6 +89,8 @@
     <!-- Jquery Core Js -->
     <script src="{{asset('assets/backend/plugins/jquery/jquery.min.js')}}"></script>
 
+    <script src="http://cdn.bootcss.com/toastr.js/latest/js/toastr.min.js"></script>
+
     <!-- Bootstrap Core Js -->
     <script src="{{asset('assets/backend/plugins/bootstrap/js/bootstrap.js')}}"></script>
 
@@ -107,5 +111,7 @@
 
     <!-- Demo Js -->
     <script src="{{asset('assets/backend/js/demo.js')}}"></script>
+
+    {!! Toastr::message() !!}
 </body>
 </html>

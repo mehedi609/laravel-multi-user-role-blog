@@ -7,18 +7,16 @@ use App\Helpers\StoreImage;
 use App\Http\Controllers\Controller;
 use App\Post;
 use App\Tag;
-use Carbon\Carbon;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
 
 class PostController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     public function index()
     {
@@ -82,8 +80,9 @@ class PostController extends Controller
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
 
-        return redirect(route('admin.post.index'))
-            ->with('successMsg', 'Post Created Successfully');
+        Toastr::success('Admin Post Created Successfully');
+
+        return redirect(route('admin.post.index'));
     }
 
     /**
@@ -154,8 +153,9 @@ class PostController extends Controller
         $post->categories()->sync($request->categories);
         $post->tags()->sync($request->tags);
 
-        return redirect(route('admin.post.index'))
-            ->with('successMsg', 'Post updated successfully');
+        Toastr::success('Admin Post updated successfully');
+
+        return redirect(route('admin.post.index'));
     }
 
     /**
@@ -166,14 +166,14 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $storeImage = new StoreImage();
-        $storeImage->deleteExistingImage('post', $post->image);
+        StoreImage::deleteExistingImage('post', $post->image);
 
         $post->categories()->detach();
         $post->tags()->detach();
         $post->delete();
 
-        return redirect(route('admin.post.index'))
-            ->with('successMsg', 'Post deleted successfully');
+        Toastr::success('Admin Post deleted successfully');
+
+        return redirect(route('admin.post.index'));
     }
 }

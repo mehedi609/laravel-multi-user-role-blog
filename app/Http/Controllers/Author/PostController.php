@@ -7,6 +7,7 @@ use App\Helpers\StoreImage;
 use App\Http\Controllers\Controller;
 use App\Post;
 use App\Tag;
+use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -80,8 +81,9 @@ class PostController extends Controller
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
 
-        return redirect(route('author.post.index'))
-            ->with('successMsg', 'Author Post Created Successfully');
+        Toastr::success('Post Inserted Successfully', 'Success');
+
+        return redirect(route('author.post.index'));
     }
 
     /**
@@ -152,8 +154,9 @@ class PostController extends Controller
         $post->categories()->sync($request->categories);
         $post->tags()->sync($request->tags);
 
-        return redirect(route('author.post.index'))
-            ->with('successMsg', 'Post updated successfully');
+        Toastr::success('Author Post updated successfully');
+
+        return redirect(route('author.post.index'));
     }
 
     /**
@@ -164,14 +167,14 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $storeImage = new StoreImage();
-        $storeImage->deleteExistingImage('post', $post->image);
+        StoreImage::deleteExistingImage('post', $post->image);
 
         $post->categories()->detach();
         $post->tags()->detach();
         $post->delete();
 
-        return redirect(route('author.post.index'))
-            ->with('successMsg', 'Author Post deleted successfully');
+        Toastr::success('Author Post deleted successfully');
+
+        return redirect(route('author.post.index'));
     }
 }
