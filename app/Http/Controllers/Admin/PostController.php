@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Category;
 use App\Helpers\StoreImage;
 use App\Http\Controllers\Controller;
+use App\Notifications\AuthorPostApproved;
 use App\Post;
 use App\Tag;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class PostController extends Controller
 {
@@ -189,6 +191,8 @@ class PostController extends Controller
         if (!$post->is_approved) {
             $post->is_approved = true;
             $post->save();
+
+            Notification::send($post->user, new AuthorPostApproved($post));
 
             Toastr::success('Post approved successfully');
             return redirect(route('admin.post.pending'));
