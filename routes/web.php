@@ -79,5 +79,10 @@ Route::group([
       ->name('profile.update');
     Route::put('password-update', 'SettingsController@updatePassword')
       ->name('password.update');
+
+    Route::get('favourite-posts', 'FavouriteController@index')
+      ->name('favourite.posts');
+    Route::delete('delete-favourite-posts/{post}', 'FavouriteController@removePostFromFavoriteList')
+      ->name('remove.favourite.posts');
   }
 );

@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', "Author Post")
+@section('title', "Post")
 
 @push('css')
   <link
@@ -11,18 +11,6 @@
 
 @section('content')
   <div class="container-fluid">
-    <div class="block-header">
-      <a href="{{route('author.post.create')}}" class="btn btn-primary waves-effect">
-        <i class="material-icons">add</i>
-        <span>Add New Post</span>
-      </a>
-
-      @if (Session::has('successMsg'))
-        <div class="alert alert-success" roles="alert">
-          toastr.success("{{ Session::get('successMsg') }}");
-        </div>
-      @endif
-    </div>
 
     <!-- Exportable Table -->
     <div class="row clearfix">
@@ -30,7 +18,7 @@
         <div class="card">
           <div class="header">
             <h2>
-              ALL POSTS <span class="my-auto badge bg-pink">{{$posts->count()}}</span>
+              ALL FAVOURITE POSTS <span class="my-auto badge bg-pink">{{$posts->count()}}</span>
             </h2>
           </div>
 
@@ -42,13 +30,9 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Author</th>
-                    <th>
-                      <i class="material-icons">visibility</i>
-                    </th>
-                    <th>In Approve</th>
-                    <th>Status</th>
-                    <th>Created At</th>
-
+                    <th><i class="material-icons">favorite</i></th>
+                    <th><i class="material-icons">comment</i></th>
+                    <th><i class="material-icons">visibility</i></th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -57,13 +41,9 @@
                     <th>ID</th>
                     <th>Title</th>
                     <th>Author</th>
-                    <th>
-                      <i class="material-icons">visibility</i>
-                    </th>
-                    <th>In Approve</th>
-                    <th>Status</th>
-                    <th>Created At</th>
-
+                    <th><i class="material-icons">favorite</i></th>
+                    <th><i class="material-icons">comment</i></th>
+                    <th><i class="material-icons">visibility</i></th>
                     <th>Actions</th>
                   </tr>
                 </tfoot>
@@ -71,27 +51,11 @@
                   @foreach ($posts ?? '' as $key => $post)
                     <tr>
                       <td>{{$key + 1}}</td>
-                      <td>{{str_limit($post->title, 15)}}</td>
+                      <td>{{str_limit($post->title, 35)}}</td>
                       <td>{{$post->user->name}}</td>
+                      <td>{{$post->favourite_to_users->count()}}</td>
+                      <td>0</td>
                       <td>{{$post->view_count}}</td>
-                      <td>
-                        @if ($post->is_approved)
-                            <span class="badge bg-blue">Approve</span>
-                        @else
-                            <span class="badge bg-pink">Pending</span>
-                        @endif
-                      </td>
-                      <td>
-                        @if ($post->status)
-                            <span class="badge bg-blue">Published</span>
-                        @else
-                            <span class="badge bg-pink">Pending</span>
-                        @endif
-                      </td>
-                      <td>
-                        {{$post->created_at->toFormattedDateString()}}
-                      </td>
-
                       <td class="text-center">
                         <a
                           href="{{route('author.post.show', $post->id)}}"
@@ -100,23 +64,16 @@
                           <i class="material-icons">visibility</i>
                         </a>
 
-                        <a
-                          href="{{route('author.post.edit', $post->id)}}"
-                          class="btn btn-info waves-effect"
-                        >
-                          <i class="material-icons">edit</i>
-                        </a>
-
                         <button
                           class="btn btn-danger waves-effect"
-                          onclick="deletePost({{$post->id}})"
+                          onclick="removePostFromFavoriteList({{$post->id}})"
                         >
                           <i class="material-icons">delete</i>
                         </button>
 
                         <form
-                          id="delete-post-form-{{$post->id}}"
-                          action="{{route('author.post.destroy', $post->id)}}"
+                          id="remove-favorite-post-form-{{$post->id}}"
+                          action="{{route('author.remove.favourite.posts', $post->id)}}"
                           method="POST"
                           class="d-none"
                         >
@@ -156,27 +113,27 @@
   <script src="{{ asset('assets/backend/js/pages/tables/jquery-datatable.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script>
-    function deletePost(id) {
+    function removePostFromFavoriteList(id) {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
-          confirmButton: 'btn btn-success',
-          cancelButton: 'btn btn-danger'
+          confirmButton: 'btn btn-success waves-effect ml-2',
+          cancelButton: 'btn btn-danger waves-effect'
         },
-        buttonsStyling: false
+        buttonsStyling: true
       })
 
       swalWithBootstrapButtons.fire({
         title: 'Are you sure?',
-        text: "You won't be able to revert this!",
+        text: "You want to remove post from your fav list",
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: 'Yes, remove it!',
         cancelButtonText: 'No, cancel!',
         reverseButtons: true
       }).then((result) => {
         if (result.value) {
           event.preventDefault();
-          document.getElementById(`delete-post-form-${id}`).submit();
+          $(`#remove-favorite-post-form-${id}`).submit();
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel

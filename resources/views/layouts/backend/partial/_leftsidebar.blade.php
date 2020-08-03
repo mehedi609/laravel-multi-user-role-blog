@@ -153,7 +153,14 @@
           <li class="{{Request::is('author/post*') ? 'active' : ''}}">
             <a href="{{route('author.post.index')}}">
               <i class="material-icons">library_books</i>
-              <span>Post</span>
+              <span>Posts</span>
+            </a>
+          </li>
+
+          <li class="{{Request::is('author/favourite-posts') ? 'active' : ''}}">
+            <a href="{{route('author.favourite.posts')}}">
+              <i class="material-icons">favorite</i>
+              <span>Favourite Posts</span>
             </a>
           </li>
 
