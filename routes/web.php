@@ -56,5 +56,12 @@ Route::group([
     Route::get('dashboard', 'AuthorDashboardController@index')
       ->name('dashboard');
     Route::resource('post', 'PostController');
+
+    Route::get('settings', 'SettingsController@index')
+      ->name('settings.index');
+    Route::put('profile-update', 'SettingsController@updateProfile')
+      ->name('profile.update');
+    Route::put('password-update', 'SettingsController@updatePassword')
+      ->name('password.update');
   }
 );

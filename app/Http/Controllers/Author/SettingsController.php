@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Author;
 
 use App\Helpers\StoreImage;
 use App\Http\Controllers\Controller;
@@ -14,7 +14,7 @@ class SettingsController extends Controller
 {
     public function index()
     {
-        return view('admin.settings.index');
+        return view('author.settings.index');
     }
 
     public function updateProfile(Request $request)
