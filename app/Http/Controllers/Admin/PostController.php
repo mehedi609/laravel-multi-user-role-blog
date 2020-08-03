@@ -6,7 +6,9 @@ use App\Category;
 use App\Helpers\StoreImage;
 use App\Http\Controllers\Controller;
 use App\Notifications\AuthorPostApproved;
+use App\Notifications\NewPostNotify;
 use App\Post;
+use App\Subscriber;
 use App\Tag;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -81,6 +83,13 @@ class PostController extends Controller
 
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
+
+        $subscribers = Subscriber::all();
+
+        foreach ($subscribers as $subscriber) {
+            Notification::route('mail', $subscriber->email)
+                ->notify(new NewPostNotify($post));
+        }
 
         Toastr::success('Admin Post Created Successfully');
 
@@ -193,6 +202,12 @@ class PostController extends Controller
             $post->save();
 
             Notification::send($post->user, new AuthorPostApproved($post));
+
+            $subscribers = Subscriber::all();
+            foreach ($subscribers as $subscriber) {
+                Notification::route('mail', $subscriber->email)
+                    ->notify(new NewPostNotify($post));
+            }
 
             Toastr::success('Post approved successfully');
             return redirect(route('admin.post.pending'));
