@@ -34,34 +34,6 @@ class CategoryController extends Controller
         return view('admin.category.create');
     }
 
-    private function deleteExistingImage($path, $old_image)
-    {
-        $old_image_path = "{$path}/{$old_image}";
-        if (Storage::disk('public')->exists($old_image_path)) {
-            Storage::disk('public')->delete($old_image_path);
-        }
-    }
-
-    private function storeImage($path, $image, $image_name, $width, $height)
-    {
-        // Check category Dir exists otherwise create it
-        if (!Storage::disk('public')->exists($path)) {
-            Storage::disk('public')->makeDirectory($path);
-        }
-
-        // Resize image and upload
-        $resized_image = Image::make($image)->resize($width, $height)->stream();
-        Storage::disk('public')->put("{$path}/{$image_name}", $resized_image);
-    }
-
-    private function createUniqueImageName($image, $slug)
-    {
-        $currentDate = Carbon::now()->toDateString();
-        $uniqId = uniqid();
-        $extension = $image->getClientOriginalExtension();
-        return "{$slug}-{$currentDate}-{$uniqId}.{$extension}";
-    }
-
     /**
      * Store a newly created resource in storage.
      *

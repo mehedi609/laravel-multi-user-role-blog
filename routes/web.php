@@ -20,6 +20,17 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::resource('subscriber', 'SubscriberController')->only(['store']);
 
 Route::group(
+    [
+        'middleware' => ['auth']
+    ],
+    function() {
+        Route::post('favourite/{post}/add', 'FavouriteController@add')
+            ->name('favourite.post');
+
+    }
+);
+
+Route::group(
   [
     'as' => 'admin.',
     'prefix' => 'admin',

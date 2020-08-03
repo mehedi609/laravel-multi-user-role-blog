@@ -60,8 +60,11 @@
                                       alt="{{$post->slug}}">
                                 </div>
 
-                                <a class="avatar" href="#">
-                                    <img src="" alt="Profile Image">
+                                <a class="avatar" href="javascript:void(0)">
+                                    <img
+                                      src="{{asset("storage/profile/{$post->user->image}")}}"
+                                      alt="Profile Image"
+                                    >
                                 </a>
 
                                 <div class="blog-info">
@@ -73,9 +76,38 @@
                                     </h4>
 
                                     <ul class="post-footer">
-                                        <li><a href="#"><i class="ion-heart"></i>57</a></li>
+                                        <li>
+                                            @guest
+                                                <a href="#" onclick="fav({{$post->id}})">
+                                                    <i class="ion-heart"></i>
+                                                    {{$post->favourite_to_users->count()}}
+                                                </a>
+                                            @else
+                                                <a
+                                                  href="javascript:void(0)"
+                                                  onclick="submitFavouriteForm({{$post->id}})"
+                                                  class="{{$post->favourite_to_users()->where('user_id', Auth::id())->count() ? 'text-primary' : ''}}"
+                                                >
+                                                    <i class="ion-heart"></i>
+                                                    {{$post->favourite_to_users->count()}}
+                                                </a>
+
+                                                <form
+                                                  action="{{route('favourite.post', $post->id)}}"
+                                                  method="POST"
+                                                  class="d-none"
+                                                  id="favourite-form-{{$post->id}}"
+                                                >
+                                                    @csrf
+                                                </form>
+                                            @endguest
+                                        </li>
                                         <li><a href="#"><i class="ion-chatbubble"></i>6</a></li>
-                                        <li><a href="#"><i class="ion-eye"></i>138</a></li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="ion-eye"></i>{{$post->view_count}}
+                                            </a>
+                                        </li>
                                     </ul>
 
                                 </div><!-- blog-info -->
@@ -95,4 +127,20 @@
 @push('js')
     <script src="{{asset('assets/frontend/js/swiper.js')}}"></script>
     <script src="{{asset('assets/frontend/js/scripts.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <script>
+        function fav(id) {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'info',
+                title: 'Oops...',
+                text: 'Please login to add as your Favourite!'
+            })
+        }
+
+        function submitFavouriteForm(id) {
+            event.preventDefault();
+            $(`#favourite-form-${id}`).submit();
+        }
+    </script>
 @endpush
