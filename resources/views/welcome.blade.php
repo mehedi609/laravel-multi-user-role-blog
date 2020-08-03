@@ -14,95 +14,29 @@
              data-swiper-breakpoints="true" data-swiper-loop="true" >
             <div class="swiper-wrapper">
 
-                <div class="swiper-slide">
-                    <a class="slider-category" href="#">
-                        <div class="blog-image"><img src="images/category-1-400x250.jpg" alt="Blog Image"></div>
+                @foreach ($categories as $category)
+                    <div class="swiper-slide">
+                        <a class="slider-category" href="#">
+                            <div class="blog-image">
+                                <img
+                                  src="{{asset("storage/category/slider/{$category->image}")}}"
+                                  alt="{{$category->slug}}"
+                                >
+                            </div>
 
-                        <div class="category">
-                            <div class="display-table center-text">
-                                <div class="display-table-cell">
-                                    <h3><b>BEAUTY</b></h3>
+                            <div class="category">
+                                <div class="display-table center-text">
+                                    <div class="display-table-cell">
+                                        <h3>
+                                            <b>{{$category->name}}</b>
+                                        </h3>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                    </a>
-                </div><!-- swiper-slide -->
-
-                <div class="swiper-slide">
-                    <a class="slider-category" href="#">
-                        <div class="blog-image"><img src="images/category-2-400x250.jpg" alt="Blog Image"></div>
-
-                        <div class="category">
-                            <div class="display-table center-text">
-                                <div class="display-table-cell">
-                                    <h3><b>SPORT</b></h3>
-                                </div>
-                            </div>
-                        </div>
-
-                    </a>
-                </div><!-- swiper-slide -->
-
-                <div class="swiper-slide">
-                    <a class="slider-category" href="#">
-                        <div class="blog-image"><img src="images/category-3-400x250.jpg" alt="Blog Image"></div>
-
-                        <div class="category">
-                            <div class="display-table center-text">
-                                <div class="display-table-cell">
-                                    <h3><b>HEALTH</b></h3>
-                                </div>
-                            </div>
-                        </div>
-
-                    </a>
-                </div><!-- swiper-slide -->
-
-                <div class="swiper-slide">
-                    <a class="slider-category" href="#">
-                        <div class="blog-image"><img src="images/category-4-400x250.jpg" alt="Blog Image"></div>
-
-                        <div class="category">
-                            <div class="display-table center-text">
-                                <div class="display-table-cell">
-                                    <h3><b>DESIGN</b></h3>
-                                </div>
-                            </div>
-                        </div>
-
-                    </a>
-                </div><!-- swiper-slide -->
-
-                <div class="swiper-slide">
-                    <a class="slider-category" href="#">
-                        <div class="blog-image"><img src="images/category-5-400x250.jpg" alt="Blog Image"></div>
-
-                        <div class="category">
-                            <div class="display-table center-text">
-                                <div class="display-table-cell">
-                                    <h3><b>MUSIC</b></h3>
-                                </div>
-                            </div>
-                        </div>
-
-                    </a>
-                </div><!-- swiper-slide -->
-
-                <div class="swiper-slide">
-                    <a class="slider-category" href="#">
-                        <div class="blog-image"><img src="images/category-6-400x250.jpg" alt="Blog Image"></div>
-
-                        <div class="category">
-                            <div class="display-table center-text">
-                                <div class="display-table-cell">
-                                    <h3><b>MOVIE</b></h3>
-                                </div>
-                            </div>
-                        </div>
-
-                    </a>
-                </div><!-- swiper-slide -->
+                        </a>
+                    </div>
+                @endforeach
 
             </div><!-- swiper-wrapper -->
 
