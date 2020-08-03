@@ -34,6 +34,9 @@ Route::group(
     Route::resource('post', 'PostController');
     Route::resource('subscriber', 'SubscriberController')->only(['index', 'destroy']);
 
+    Route::get('settings', 'SettingsController@index')->name('settings.index');
+    Route::put('profile-update', 'SettingsController@update')->name('profile.update');
+
     Route::get('pending/post', 'PostController@pending')->name('post.pending');
     Route::put('post/{post}/approve}', 'PostController@approval')->name('post.approve');
   }

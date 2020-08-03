@@ -88,6 +88,16 @@
           </li>
 
           <li class="header">SYSTEM</li>
+
+          <li class="{{Request::is('admin/settings*') ? 'active' : ''}}">
+            <a
+              href="{{ route('admin.settings.index') }}"
+            >
+              <i class="material-icons">settings</i>
+              <span>Settings</span>
+            </a>
+          </li>
+
           <li>
             <a
               href="{{ route('logout') }}"
