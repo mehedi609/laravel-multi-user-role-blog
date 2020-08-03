@@ -8,6 +8,7 @@ use App\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class SettingsController extends Controller
 {
@@ -61,6 +62,38 @@ class SettingsController extends Controller
         Toastr::success('Profile Updated Successfully', 'Profile Updated');
 
         return redirect()->back();
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|min:6|confirmed',
+        ]);
+
+        $plain_old_password = $request->old_password;
+        $plain_new_password = $request->password;
+        $hashed_password = Auth::user()->password;
+
+        if (Hash::check($plain_old_password, $hashed_password)) {
+            if (!Hash::check($plain_new_password, $hashed_password)) {
+                $user = User::findOrFail(Auth::id());
+                $user->password = Hash::make($plain_new_password);
+                $user->save();
+                Auth::logout();
+
+                Toastr::success('Password Updated Successfully', 'Password Updated');
+                return redirect()->back();
+            } else {
+                Toastr::error("You enter an old password", "Same Password");
+                return redirect()->back();
+            }
+        } else {
+            Toastr::error("Old password doesn't match", "Mismatch Old Password");
+            return redirect()->back();
+        }
+
+        return $request;
     }
 
     /**

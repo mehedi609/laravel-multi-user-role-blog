@@ -52,7 +52,7 @@
 
                           <div class="row clearfix">
                             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                              <label for="user_name">Name</label>
+                              <label for="name">Name</label>
                             </div>
                             <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                               <div class="form-group">
@@ -72,7 +72,7 @@
 
                           <div class="row clearfix">
                             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                              <label for="">Email</label>
+                              <label for="email">Email</label>
                             </div>
                             <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                               <div class="form-group">
@@ -92,7 +92,7 @@
 
                           <div class="row clearfix">
                             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                              <label for="password_2">Profile Image</label>
+                              <label for="image">Profile Image</label>
                             </div>
                             <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                               <div class="form-group">
@@ -144,14 +144,104 @@
                 </div>
                 <!-- #END# Horizontal Layout -->
               </div>
+
               <div role="tabpanel" class="tab-pane fade" id="profile_with_icon_title">
-                <b>Profile Content</b>
-                <p>
-                  Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                  Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                  pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                  sadipscing mel.
-                </p>
+                <!-- Horizontal Layout -->
+                <div class="row clearfix">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                      <div class="body">
+                        <form
+                          class="form-horizontal"
+                          method="POST"
+                          action="{{route('admin.password.update')}}"
+                        >
+                          @csrf
+                          @method('PUT')
+
+                          <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                              <label for="old_password">Old Password</label>
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                              <div class="form-group">
+                                <div class="form-line">
+                                  <input
+                                    type="password"
+                                    id="old_password"
+                                    name="old_password"
+                                    class="form-control"
+                                    placeholder="Enter your old password"
+                                  >
+                                </div>
+                              </div>
+                              @error ('old_password')
+                              <div class="m-t-5 m-l--15 text-danger">
+                                <small>{{$message}}</small>
+                              </div>
+                              @enderror
+                            </div>
+                          </div>
+
+                          <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                              <label for="password">New Password</label>
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                              <div class="form-group">
+                                <div class="form-line">
+                                  <input
+                                    type="password"
+                                    id="password"
+                                    name="password"
+                                    class="form-control"
+                                    placeholder="Enter your new password"
+                                  >
+                                </div>
+                              </div>
+                              @error ('password')
+                              <div class="m-t-5 m-l--15 text-danger">
+                                <small>{{$message}}</small>
+                              </div>
+                              @enderror
+                            </div>
+                          </div>
+
+                          <div class="row clearfix">
+                            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                              <label for="password_confirmation">Confirm Password</label>
+                            </div>
+                            <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                              <div class="form-group">
+                                <div class="form-line">
+                                  <input
+                                    type="password"
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    class="form-control"
+                                    placeholder="Enter your confirm password"
+                                  >
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div class="row clearfix">
+                            <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                              <button
+                                type="submit"
+                                class="btn btn-primary m-t-15 waves-effect"
+                              >
+                                CHANGE PASSWORD
+                              </button>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- #END# Horizontal Layout -->
               </div>
             </div>
           </div>
