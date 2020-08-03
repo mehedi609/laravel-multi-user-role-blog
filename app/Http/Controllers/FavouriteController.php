@@ -20,7 +20,7 @@ class FavouriteController extends Controller
         }
 
         $post->favourite_to_users()->detach(Auth::user());
-        Toastr::warning('Post sucessfully remove from your favourite list', 'Remove Liked');
+        Toastr::warning('Post successfully remove from your favourite list', 'Remove Liked');
         return redirect()->back();
 
 
