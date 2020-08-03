@@ -84,12 +84,13 @@ class PostController extends Controller
         $post->categories()->attach($request->categories);
         $post->tags()->attach($request->tags);
 
-        $subscribers = Subscriber::all();
+        $this->sendNotificationViaEmail($post, null, Subscriber::all());
 
+        /*$subscribers = Subscriber::all();
         foreach ($subscribers as $subscriber) {
             Notification::route('mail', $subscriber->email)
                 ->notify(new NewPostNotify($post));
-        }
+        }*/
 
         Toastr::success('Admin Post Created Successfully');
 
@@ -201,19 +202,34 @@ class PostController extends Controller
             $post->is_approved = true;
             $post->save();
 
-            Notification::send($post->user, new AuthorPostApproved($post));
+            /*Notification::send($post->user, new AuthorPostApproved($post));
 
             $subscribers = Subscriber::all();
             foreach ($subscribers as $subscriber) {
                 Notification::route('mail', $subscriber->email)
                     ->notify(new NewPostNotify($post));
-            }
+            }*/
+
+            $this->sendNotificationViaEmail($post, $post->user, Subscriber::all());
 
             Toastr::success('Post approved successfully');
             return redirect(route('admin.post.pending'));
         } else {
             Toastr::info('Post already approved!');
             return redirect(route('admin.post.pending'));
+        }
+    }
+
+    private function sendNotificationViaEmail($post, $author, $subscribers)
+    {
+        if ($author)
+            Notification::send($author, new AuthorPostApproved($post));
+
+        if ($subscribers) {
+            foreach ($subscribers as $subscriber) {
+                Notification::route('mail', $subscriber->email)
+                    ->notify(new NewPostNotify($post));
+            }
         }
     }
 }
