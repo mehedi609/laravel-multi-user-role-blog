@@ -76,6 +76,7 @@ Route::group(
     Route::get('dashboard', 'AuthorDashboardController@index')
       ->name('dashboard');
     Route::resource('post', 'PostController');
+    Route::resource('comments', 'CommentController')->only(['index', 'destroy']);
 
     Route::get('settings', 'SettingsController@index')
       ->name('settings.index');

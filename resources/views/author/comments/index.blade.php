@@ -19,7 +19,7 @@
           <div class="header">
             <h2>
               ALL FAVOURITE POSTS
-              <span class="my-auto badge bg-pink">{{$comments->count()}}</span>
+              <span class="my-auto badge bg-pink">{{count($comments)}}</span>
             </h2>
           </div>
 
@@ -102,7 +102,7 @@
 
                         <form
                           id="delete-comment-form-{{$comment->id}}"
-                          action="{{route('admin.comments.destroy', $comment->id)}}"
+                          action="{{route('author.comments.destroy', $comment->id)}}"
                           method="POST"
                           class="d-none"
                         >
@@ -142,38 +142,38 @@
   <script src="{{ asset('assets/backend/js/pages/tables/jquery-datatable.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script>
-    function deleteComment(id) {
-      const swalWithBootstrapButtons = Swal.mixin({
-        customClass: {
-          confirmButton: 'btn btn-success waves-effect ml-2',
-          cancelButton: 'btn btn-danger waves-effect'
-        },
-        buttonsStyling: true
-      })
+      function deleteComment(id) {
+          const swalWithBootstrapButtons = Swal.mixin({
+              customClass: {
+                  confirmButton: 'btn btn-success waves-effect ml-2',
+                  cancelButton: 'btn btn-danger waves-effect'
+              },
+              buttonsStyling: true
+          })
 
-      swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: "You want to remove post from your fav list",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, remove it!',
-        cancelButtonText: 'No, cancel!',
-        reverseButtons: true
-      }).then((result) => {
-        if (result.value) {
-          event.preventDefault();
-          $(`#delete-comment-form-${id}`).submit();
-        } else if (
-          /* Read more about handling dismissals below */
-          result.dismiss === Swal.DismissReason.cancel
-        ) {
-          swalWithBootstrapButtons.fire(
-            'Cancelled',
-            'Your file is safe :)',
-            'error'
-          )
-        }
-      })
-    }
+          swalWithBootstrapButtons.fire({
+              title: 'Are you sure?',
+              text: "You want to remove post from your fav list",
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'Yes, remove it!',
+              cancelButtonText: 'No, cancel!',
+              reverseButtons: true
+          }).then((result) => {
+              if (result.value) {
+                  event.preventDefault();
+                  $(`#delete-comment-form-${id}`).submit();
+              } else if (
+                  /* Read more about handling dismissals below */
+                  result.dismiss === Swal.DismissReason.cancel
+              ) {
+                  swalWithBootstrapButtons.fire(
+                      'Cancelled',
+                      'Your file is safe :)',
+                      'error'
+                  )
+              }
+          })
+      }
   </script>
 @endpush

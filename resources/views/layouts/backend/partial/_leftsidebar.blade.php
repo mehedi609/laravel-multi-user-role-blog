@@ -171,6 +171,13 @@
             </a>
           </li>
 
+          <li class="{{Request::is('author/comments*') ? 'active' : ''}}">
+            <a href="{{route('author.comments.index')}}">
+              <i class="material-icons">comment</i>
+              <span>All Comments</span>
+            </a>
+          </li>
+
           <li class="header">SYSTEM</li>
 
           <li class="{{Request::is('author/settings') ? 'active' : ''}}">
