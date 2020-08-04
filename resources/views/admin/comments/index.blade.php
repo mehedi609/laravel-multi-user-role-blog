@@ -1,6 +1,6 @@
 @extends('layouts.backend.app')
 
-@section('title', "Favorite Posts")
+@section('title', "All Comments")
 
 @push('css')
   <link
@@ -18,7 +18,8 @@
         <div class="card">
           <div class="header">
             <h2>
-              ALL FAVOURITE POSTS <span class="my-auto badge bg-pink">{{$posts->count()}}</span>
+              ALL FAVOURITE POSTS
+              <span class="my-auto badge bg-pink">{{$comments->count()}}</span>
             </h2>
           </div>
 
@@ -27,53 +28,81 @@
               <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                 <thead>
                   <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th><i class="material-icons">favorite</i></th>
-                    <th><i class="material-icons">comment</i></th>
-                    <th><i class="material-icons">visibility</i></th>
+                    <th>Comments Info</th>
+                    <th>Post Info</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
                 <tfoot>
                   <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th><i class="material-icons">favorite</i></th>
-                    <th><i class="material-icons">comment</i></th>
-                    <th><i class="material-icons">visibility</i></th>
+                    <th>Comments Info</th>
+                    <th>Post Info</th>
                     <th>Actions</th>
                   </tr>
                 </tfoot>
                 <tbody>
-                  @foreach ($posts ?? '' as $key => $post)
+                  @foreach ($comments as $key => $comment)
                     <tr>
-                      <td>{{$key + 1}}</td>
-                      <td>{{str_limit($post->title, 35)}}</td>
-                      <td>{{$post->user->name}}</td>
-                      <td>{{$post->favourite_to_users->count()}}</td>
-                      <td>0</td>
-                      <td>{{$post->view_count}}</td>
-                      <td class="text-center">
-                        <a
-                          href="{{route('admin.post.show', $post->id)}}"
-                          class="btn btn-success waves-effect"
-                        >
-                          <i class="material-icons">visibility</i>
-                        </a>
+                      <td>
+                        <div class="media">
+                          <div class="media-left">
+                            <a href="#">
+                              <img
+                                class="media-object"
+                                src="{{asset("storage/profile/{$comment->user->image}")}}"
+                                alt="{{$comment->user->name}}"
+                                width="80"
+                                height="80"
+                              >
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <h5 class="media-heading d-inline-block m-b--5">{{$comment->user->name}}</h5>
+                            <small> commneted {{$comment->created_at->diffForHumans()}}</small>
+                            <p>{{$comment->comment}}</p>
+                            <a
+                              href="{{route('post.details', $comment->post->slug)}}"
+                              target="_blank"
+                            >
+                              Reply
+                            </a>
+                          </div>
+                        </div>
+                      </td>
 
+                      <td>
+                        <div class="media">
+                          <div class="media-left">
+                            <a href="#">
+                              <img
+                                class="media-object"
+                                src="{{asset("storage/post/{$comment->post->image}")}}"
+                                alt="{{$comment->post->slug}}"
+                                width="80"
+                                height="80"
+                              >
+                            </a>
+                          </div>
+                          <div class="media-body">
+                            <a href="{{route('post.details', $comment->post->slug)}}" target="_blank">
+                              <h6 class="media-heading">{{str_limit($comment->post->title, 50)}}</h6>
+                            </a>
+                            <p>Posted By <em>{{$comment->user->name}}</em></p>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td>
                         <button
                           class="btn btn-danger waves-effect"
-                          onclick="removePostFromFavoriteList({{$post->id}})"
+                          onclick="deleteComment({{$comment->id}})"
                         >
                           <i class="material-icons">delete</i>
                         </button>
 
                         <form
-                          id="remove-favorite-post-form-{{$post->id}}"
-                          action="{{route('admin.remove.favourite.posts', $post->id)}}"
+                          id="delete-comment-form-{{$comment->id}}"
+                          action="{{route('admin.comments.destroy', $comment->id)}}"
                           method="POST"
                           class="d-none"
                         >
@@ -113,7 +142,7 @@
   <script src="{{ asset('assets/backend/js/pages/tables/jquery-datatable.js') }}"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
   <script>
-    function removePostFromFavoriteList(id) {
+    function deleteComment(id) {
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-success waves-effect ml-2',
@@ -133,7 +162,7 @@
       }).then((result) => {
         if (result.value) {
           event.preventDefault();
-          $(`#remove-favorite-post-form-${id}`).submit();
+          $(`#delete-comment-form-${id}`).submit();
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel

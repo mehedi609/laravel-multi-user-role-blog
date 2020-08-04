@@ -46,6 +46,7 @@ Route::group(
     Route::resource('category', 'CategoryController');
     Route::resource('post', 'PostController');
     Route::resource('subscriber', 'SubscriberController')->only(['index', 'destroy']);
+    Route::resource('comments', 'CommentController')->only(['index', 'destroy']);
 
     Route::get('settings', 'SettingsController@index')
       ->name('settings.index');
@@ -64,12 +65,13 @@ Route::group(
   }
 );
 
-Route::group([
-  'as' => 'author.',
-  'prefix' => 'author',
-  'namespace' => 'Author',
-  'middleware' => ['auth', 'author']
-],
+Route::group(
+  [
+    'as' => 'author.',
+    'prefix' => 'author',
+    'namespace' => 'Author',
+    'middleware' => ['auth', 'author']
+  ],
   function () {
     Route::get('dashboard', 'AuthorDashboardController@index')
       ->name('dashboard');
