@@ -8,22 +8,31 @@ use Illuminate\Support\Facades\Session;
 
 class PostController extends Controller
 {
-    public function details($slug)
-    {
-        $post = Post::where('slug',$slug)
-          ->where('is_approved', true)
-          ->where('status', true)
-          ->first();
-        $random_posts = Post::all()->random(3);
+  public function index()
+  {
+    $posts = Post::where('is_approved', true)
+      ->where('status', true)
+      ->latest()
+      ->paginate(3);
+    return view('posts', compact('posts'));
+  }
 
-        $blog_key = "blog_{$post->id}";
-        if (!Session::has($blog_key)) {
-          $post->increment('view_count');
-          Session::put($blog_key, 1);
-        }
+  public function details($slug)
+  {
+    $post = Post::where('slug', $slug)
+      ->where('is_approved', true)
+      ->where('status', true)
+      ->first();
+    $random_posts = Post::all()->random(3);
 
-      $key = Session::get($blog_key);
-
-        return view('post-details', compact('post', 'random_posts'));
+    $blog_key = "blog_{$post->id}";
+    if (!Session::has($blog_key)) {
+      $post->increment('view_count');
+      Session::put($blog_key, 1);
     }
+
+    $key = Session::get($blog_key);
+
+    return view('post-details', compact('post', 'random_posts'));
+  }
 }
