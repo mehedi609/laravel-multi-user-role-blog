@@ -12,10 +12,9 @@
 */
 
 Route::get('/', 'HomeController@index')->name('mainhome');
+Route::get('post/{slug}', 'PostController@details')->name('post.details');
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
 
 Route::resource('subscriber', 'SubscriberController')->only(['store']);
 
