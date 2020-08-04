@@ -22,14 +22,14 @@ Auth::routes();
 Route::resource('subscriber', 'SubscriberController')->only(['store']);
 
 Route::group(
-    [
-        'middleware' => ['auth']
-    ],
-    function() {
-        Route::post('favourite/{post}/add', 'FavouriteController@add')
-            ->name('favourite.post');
+  [
+    'middleware' => ['auth']
+  ],
+  function () {
+    Route::post('favourite/{post}/add', 'FavouriteController@add')->name('favourite.post');
+    Route::post('comment/{post}', 'CommentController@store')->name('comment.store');
 
-    }
+  }
 );
 
 Route::group(
@@ -39,7 +39,7 @@ Route::group(
     'namespace' => 'Admin',
     'middleware' => ['auth', 'admin']
   ],
-  function() {
+  function () {
     Route::get('dashboard', 'AdminDashboardController@index')
       ->name('dashboard');
     Route::resource('tag', 'TagController');
@@ -48,16 +48,16 @@ Route::group(
     Route::resource('subscriber', 'SubscriberController')->only(['index', 'destroy']);
 
     Route::get('settings', 'SettingsController@index')
-        ->name('settings.index');
+      ->name('settings.index');
     Route::put('profile-update', 'SettingsController@updateProfile')
-        ->name('profile.update');
+      ->name('profile.update');
     Route::put('password-update', 'SettingsController@updatePassword')
-        ->name('password.update');
+      ->name('password.update');
 
     Route::get('favourite-posts', 'FavouriteController@index')
-        ->name('favourite.posts');
+      ->name('favourite.posts');
     Route::delete('delete-favourite-posts/{post}', 'FavouriteController@removePostFromFavoriteList')
-        ->name('remove.favourite.posts');
+      ->name('remove.favourite.posts');
 
     Route::get('pending/post', 'PostController@pending')->name('post.pending');
     Route::put('post/{post}/approve}', 'PostController@approval')->name('post.approve');
@@ -65,12 +65,12 @@ Route::group(
 );
 
 Route::group([
-    'as' => 'author.',
-    'prefix' => 'author',
-    'namespace' => 'Author',
-    'middleware' => ['auth', 'author']
-  ],
-  function() {
+  'as' => 'author.',
+  'prefix' => 'author',
+  'namespace' => 'Author',
+  'middleware' => ['auth', 'author']
+],
+  function () {
     Route::get('dashboard', 'AuthorDashboardController@index')
       ->name('dashboard');
     Route::resource('post', 'PostController');

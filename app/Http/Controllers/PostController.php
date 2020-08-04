@@ -33,6 +33,8 @@ class PostController extends Controller
 
     $key = Session::get($blog_key);
 
-    return view('post-details', compact('post', 'random_posts'));
+    $comments =  $post->comments;
+
+    return view('post-details', compact('post', 'random_posts', 'comments'));
   }
 }
