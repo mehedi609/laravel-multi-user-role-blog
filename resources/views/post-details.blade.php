@@ -9,12 +9,13 @@
   <link href="{{asset('assets/frontend/css/single-post/responsive.css')}}" rel="stylesheet">
 
   <style>
-      .slider{
-          height: 400px;
-          width: 100%;
-          background-size: cover;
-          margin: 0;
-          background-image: url({{asset("storage/post/{$post->image}")}}); }
+    .slider {
+      height: 400px;
+      width: 100%;
+      background-size: cover;
+      margin: 0;
+      background-image: url({{asset("storage/post/{$post->image}")}});
+    }
   </style>
 @endpush
 
