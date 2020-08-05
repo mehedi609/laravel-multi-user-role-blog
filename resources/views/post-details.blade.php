@@ -136,7 +136,11 @@
               <h4 class="title"><b>CATEGORIES</b></h4>
               <ul>
                 @foreach ($post->categories as $category)
-                  <li><a href="javascript:void(0)">{{$category->name}}</a></li>
+                  <li>
+                    <a href="{{route('posts.by.category', $category->slug)}}">
+                      {{$category->name}}
+                    </a>
+                  </li>
                 @endforeach
 
               </ul>
@@ -303,66 +307,6 @@
               <p>No Comments yet. Be the first.</p>
             </div>
           @endif
-{{--          <div class="commnets-area">
-
-            <div class="comment">
-              <h5 class="reply-for">Reply for <a href="#"><b>Katy Lui</b></a></h5>
-
-              <div class="post-info">
-
-                <div class="left-area">
-                  <a class="avatar" href="#"><img src="images/avatar-1-120x120.jpg" alt="Profile Image"></a>
-                </div>
-
-                <div class="middle-area">
-                  <a class="name" href="#"><b>Katy Liu</b></a>
-                  <h6 class="date">on Sep 29, 2017 at 9:48 am</h6>
-                </div>
-
-                <div class="right-area">
-                  <h5 class="reply-btn"><a href="#"><b>REPLY</b></a></h5>
-                </div>
-
-              </div><!-- post-info -->
-
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur
-                Ut enim ad minim veniam</p>
-
-            </div>
-
-          </div><!-- commnets-area -->
-
-          <div class="commnets-area ">
-
-            <div class="comment">
-
-              <div class="post-info">
-
-                <div class="left-area">
-                  <a class="avatar" href="#"><img src="images/avatar-1-120x120.jpg" alt="Profile Image"></a>
-                </div>
-
-                <div class="middle-area">
-                  <a class="name" href="#"><b>Katy Liu</b></a>
-                  <h6 class="date">on Sep 29, 2017 at 9:48 am</h6>
-                </div>
-
-                <div class="right-area">
-                  <h5 class="reply-btn"><a href="#"><b>REPLY</b></a></h5>
-                </div>
-
-              </div><!-- post-info -->
-
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur
-                Ut enim ad minim veniam</p>
-
-            </div>
-
-          </div><!-- commnets-area -->
-
-          <a class="more-comment-btn" href="#"><b>VIEW MORE COMMENTS</b></a>--}}
 
         </div><!-- col-lg-8 col-md-12 -->
 

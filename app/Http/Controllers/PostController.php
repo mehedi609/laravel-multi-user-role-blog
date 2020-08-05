@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -13,7 +14,7 @@ class PostController extends Controller
     $posts = Post::where('is_approved', true)
       ->where('status', true)
       ->latest()
-      ->paginate(3);
+      ->paginate(6);
     return view('posts', compact('posts'));
   }
 
@@ -31,10 +32,16 @@ class PostController extends Controller
       Session::put($blog_key, 1);
     }
 
-    $key = Session::get($blog_key);
-
     $comments =  $post->comments;
 
     return view('post-details', compact('post', 'random_posts', 'comments'));
+  }
+
+  public function postsByCategory($slug)
+  {
+    $category = Category::where('slug', $slug)->first();
+
+    return view('posts-by-category', compact('category'));
+
   }
 }
